@@ -2,47 +2,61 @@ const Calendar = ({ date }) => {
 
   const getGenitiveMonth = {
     'январь': 'января',
-		'февраль': 'февраля',
-		'март': 'марта',
-		'апрель': 'апреля',
-		'май': 'мая',
-		'июнь': 'июня',
-		'июль': 'июля',
-		'август': 'августа',
-		'сентябрь': 'сентября',
-		'октябрь': 'октября',
-		'ноябрь': 'ноября',
-		'декабрь': 'декабря'
+    'февраль': 'февраля',
+    'март': 'марта',
+    'апрель': 'апреля',
+    'май': 'мая',
+    'июнь': 'июня',
+    'июль': 'июля',
+    'август': 'августа',
+    'сентябрь': 'сентября',
+    'октябрь': 'октября',
+    'ноябрь': 'ноября',
+    'декабрь': 'декабря'
   };
 
-  const day = date.toLocaleString('ru', {weekday: 'long'});
+  const dayTxt = date.toLocaleString('ru', {weekday: 'long'});
+  const monthTxt = date.toLocaleString('ru', {month: 'long'}); 
   const dayNum = date.getDate();
-  const month = date.toLocaleString('ru', {month: 'long'}); 
-  const genetiveMonth = getGenitiveMonth[month];
-  const year = date.getFullYear();
-  const firstDayOfMonth = date.getDate();
+  const monthNum = date.getMonth();
+  const yearNum = date.getFullYear();
+  const genetiveMonth = getGenitiveMonth[monthTxt];
+
+  const firstDayOfMonth = new Date(yearNum, monthNum, 1).getDate();
+  const lastDayOfMonth = new Date(yearNum, monthNum + 1, 0).getDate();
+
+  let firstDayOfTheWeek = new Date(yearNum, monthNum, 1).getDay();
+  let lastDayOfTheWeek = new Date(yearNum, monthNum + 1, 0).getDay();
+
+  console.log('firstDayOfMonth', firstDayOfMonth);
+  console.log('lastDayOfMonth', lastDayOfMonth);
+  
 
   // ui-datepicker-other-month
   // ui-datepicker-today
   
-  const _days = [];
-
-  const generateWeek = (i) => {
-    const week = [];
-
-    for (let j = 1; j <= 7; j++) {
-      
-      week.push(<td>{j + i * 7 }</td>);
-    }
-
-    return week;
-  };
-
-  const generateMonth = () => {
+  const generateMonth = (date) => {
     const month = [];
 
-    for ( let i = 0; i < 5; i++) {
-      month.push(<tr>{generateWeek(i)}</tr>);
+    if (firstDayOfTheWeek === 0) {
+      firstDayOfTheWeek = 7;
+    }
+
+    for (let i = 0; i < 5; i++) {
+      const week = [];
+
+      for (let j = 0; j < 7; j++) {
+        
+        for (firstDayOfTheWeek; firstDayOfTheWeek > 0; firstDayOfTheWeek--) {
+          console.log('firstDayOfTheWeek', firstDayOfTheWeek);
+        }
+
+        const currentDay = j + i * 7;
+
+        week.push(<td>{currentDay}</td>);
+      }
+
+      month.push(<tr>{week}</tr>);
     }
 
     return month;
@@ -51,16 +65,16 @@ const Calendar = ({ date }) => {
   return (
     <div className="ui-datepicker">
       <div className="ui-datepicker-material-header">
-        <div className="ui-datepicker-material-day">{day}</div>
+        <div className="ui-datepicker-material-day">{dayTxt}</div>
         <div className="ui-datepicker-material-date">
           <div className="ui-datepicker-material-day-num">{dayNum}</div>
           <div className="ui-datepicker-material-month">{genetiveMonth}</div>
-          <div className="ui-datepicker-material-year">{year}</div>
+          <div className="ui-datepicker-material-year">{yearNum}</div>
         </div>
       </div>
       <div className="ui-datepicker-header">
         <div className="ui-datepicker-title">
-          <span className="ui-datepicker-month">{month}</span>&nbsp;<span className="ui-datepicker-year">{year}</span>
+          <span className="ui-datepicker-month">{monthTxt}</span>&nbsp;<span className="ui-datepicker-year">{yearNum}</span>
         </div>
       </div>
       <table className="ui-datepicker-calendar">
@@ -85,7 +99,7 @@ const Calendar = ({ date }) => {
           </tr>
         </thead>
         <tbody>
-          {generateMonth()}
+          {generateMonth(date)}
         </tbody>
       </table>
     </div>
