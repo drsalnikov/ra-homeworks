@@ -15,45 +15,51 @@ const Calendar = ({ date }) => {
     'декабрь': 'декабря'
   };
 
-  const dayTxt = date.toLocaleString('ru', {weekday: 'long'});
+  const today = date.getDate();
+  const dayTxt = date.toLocaleString('ru', {weekday: 'long'}).toUpperCase();
   const monthTxt = date.toLocaleString('ru', {month: 'long'}); 
   const dayNum = date.getDate();
   const monthNum = date.getMonth();
   const yearNum = date.getFullYear();
   const genetiveMonth = getGenitiveMonth[monthTxt];
+  const firstDayOfMonth = new Date(yearNum, monthNum, 1).getDay();
 
-  const firstDayOfMonth = new Date(yearNum, monthNum, 1).getDate();
-  const lastDayOfMonth = new Date(yearNum, monthNum + 1, 0).getDate();
+  let currentDay = 2 - firstDayOfMonth;  
+  let weekInMonth = 5;
 
-  let firstDayOfTheWeek = new Date(yearNum, monthNum, 1).getDay();
-  let lastDayOfTheWeek = new Date(yearNum, monthNum + 1, 0).getDay();
+  // исключение для воскресенья
+  if (firstDayOfMonth === 0) {
+    currentDay = -5;
+  }
 
-  console.log('firstDayOfMonth', firstDayOfMonth);
-  console.log('lastDayOfMonth', lastDayOfMonth);
-  
+  // исключение по количеству недель в месяце
+  if (firstDayOfMonth === 0 && monthNum !== 1 ) {
+    weekInMonth++;
+  }
 
-  // ui-datepicker-other-month
-  // ui-datepicker-today
-  
   const generateMonth = (date) => {
     const month = [];
 
-    if (firstDayOfTheWeek === 0) {
-      firstDayOfTheWeek = 7;
-    }
-
-    for (let i = 0; i < 5; i++) {
+    // для каждой недели в месяце
+    for (let i = 0; i < weekInMonth; i++) {
       const week = [];
 
-      for (let j = 0; j < 7; j++) {
-        
-        for (firstDayOfTheWeek; firstDayOfTheWeek > 0; firstDayOfTheWeek--) {
-          console.log('firstDayOfTheWeek', firstDayOfTheWeek);
+      // для каждого дня недели 
+      for (let j = 1; j <= 7; j++) {
+        const currentDate = new Date(yearNum, monthNum, currentDay).getDate();
+        const currentMonth = new Date(yearNum, monthNum, currentDay).getMonth();
+  
+        if (date.getMonth() !== currentMonth) {
+          week.push(<td className='ui-datepicker-other-month'>{currentDate}</td>);
+
+        } else if (today === currentDate) {
+          week.push(<td className='ui-datepicker-today'>{currentDate}</td>);
+
+        } else {
+          week.push(<td>{currentDate}</td>);
+
         }
-
-        const currentDay = j + i * 7;
-
-        week.push(<td>{currentDay}</td>);
+        currentDay++;
       }
 
       month.push(<tr>{week}</tr>);
@@ -105,5 +111,3 @@ const Calendar = ({ date }) => {
     </div>
   );
 }
-
-
