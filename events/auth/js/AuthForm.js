@@ -1,35 +1,42 @@
 'use strict';
 
 const AuthForm = ({onAuth}) => {
+  const user = {};
 
   const onSubmit = (event) => {
+    user.name = event.currentTarget.name.value;
+    user.email = event.currentTarget.email.value;
+    user.password = event.currentTarget.password.value;
+
     event.preventDefault();
     if (typeof onAuth === 'function' ){
-      console.log(typeof onAuth);
+      onAuth(user);
     }
-  }
-
-  const getName = event => {
-    const field = event.currentTarget;
-    console.log(field.value);
   };
 
   const getEmail = event => {
-    console.log(event.currentTarget);
+    const field = event.currentTarget.value;
+    event.currentTarget.value = field.replace(/[^a-zA-Z@.-]/gi,'');
   };
+
+  const getPassword = event => {
+    const field = event.currentTarget.value;
+    event.currentTarget.value = field.replace(/[^a-zA-Z0-9_]/gi,'');
+  };
+  
 
   return (
     <form className='ModalForm' action='/404/auth/' method='POST' onSubmit={onSubmit}>
       <div className='Input'>
-        <input required type='text' placeholder='Имя' name='name' defaultValue='test' onChange={getName} />
+        <input required type='text' placeholder='Имя' name='name' />
         <label></label>
       </div>
       <div className='Input'>
-        <input type='email' placeholder='Электронная почта' email='email' defaultValue='test@test.ts' onChange={getEmail} />
+        <input type='email' placeholder='Электронная почта' name='email' onChange={getEmail} />
         <label></label>
       </div>
       <div className='Input'>
-        <input required type='password' placeholder='Пароль' password='password' defaultValue='test'/>
+        <input required type='password' placeholder='Пароль' name='password' onChange={getPassword} />
         <label></label>
       </div>
       <button type='submit'>
