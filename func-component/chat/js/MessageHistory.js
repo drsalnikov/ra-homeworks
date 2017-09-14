@@ -1,26 +1,22 @@
 'use strict';
 
-function MessageHistory( {list} ) {
+function MessageHistory({list}) {
 
-  if ( !Array.isArray(list) || list.length === 0 ) {
+  if (!Array.isArray(list) || list.length === 0) {
     return null;
   }
 
-  let history = list.map( (message, index) => {
+  const messages = {
+    response: Response,
+    message: Message,
+    typing: Typing
+  };
 
-    switch (message.type) {
-      case 'message':
-        return <Message from = {message.from} message = {message} />
-        break;
-      case 'response':
-        return <Response from = {message.from} message = {message} />
-        break;   
-      case 'typing':
-        return <Typing from = {message.from} message = {message} />
-        break;     
-    }
-
+  let history = list.map((message, index) => {
+    console.log(message);
+    const Component = messages[message.type];
+    return <Component key={message.id} from={message.from} message={message} />
   });
 
-  return <ul>{ history }</ul>;
+  return <ul>{history}</ul>;
 }
