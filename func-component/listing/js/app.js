@@ -1,29 +1,31 @@
 'use strict';
 
 function ItemPrice({price, currency}) {
+  let fullPrice;
+
   if (currency === 'USD') {
-    return <p className='item-price'>${price}</p>
-
+    fullPrice = '$' + price;
   } else if (currency === 'EUR') {
-    return <p className='item-price'>€{price}</p>
-
-  } else  {
-    return <p className='item-price'>{price}{currency}</p>
-
+    fullPrice = '€' + price;
+  } else {
+    fullPrice = price + currency;
   }
+
+  return <p className='item-price'>{fullPrice}</p>
 }
 
 function ItemQuantity({quantity}) {
+  let level = 'item-quantity level-';
+
   if (quantity <= 10) {
-    return <p className='item-quantity level-low'>{quantity} left</p>
-
+    level += 'low';
   } else if (quantity > 10 && quantity <= 20) {
-    return <p className='item-quantity level-medium'>{quantity} left</p>
-
+    level += 'medium';
   } else if (quantity > 20) {
-    return <p className='item-quantity level-high'>{quantity} left</p>
-
+    level += 'high';
   }
+
+  return <p className={level}>{quantity} left</p>
 }
 
 function MyItem({item}) {
@@ -32,24 +34,24 @@ function MyItem({item}) {
   }
 
   return (
-      <div className='item' key = {item.listing_id}>
-        <div className='item-image'>
-          <a href = {item.url}>
-            <img src = {item.MainImage.url_570xN} />
-          </a>
-        </div>
-        <div className='item-details'>
-          <p className='item-title'>{item.title}</p>
-          <ItemPrice price={item.price} currency={item.currency_code} />
-          <ItemQuantity quantity={item.quantity} />
-        </div>
+    <div className='item'>
+      <div className='item-image'>
+        <a href = {item.url}>
+          <img src = {item.MainImage.url_570xN} />
+        </a>
       </div>
+      <div className='item-details'>
+        <p className='item-title'>{item.title}</p>
+        <ItemPrice price={item.price} currency={item.currency_code} />
+        <ItemQuantity quantity={item.quantity} />
+      </div>
+    </div>
   );
 }
 
 function Listing({items}) {
   const lists = items.map((item) => {
-    return <MyItem item={item} />;
+    return <MyItem key={item.listing_id} item={item} />;
   });
 
   return <div className='item-list' >{lists}</div>;
