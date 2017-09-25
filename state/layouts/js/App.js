@@ -4,17 +4,31 @@ const VIEW_LIST = "view_list";
 const VIEW_MODULE = "view_module";
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      icon: VIEW_MODULE
+    }
+  }
+
   render() {
     return (
       <div>
         <div className="toolbar">
           <IconSwitch
-            icon={VIEW_MODULE}
-            onSwitch={() => console.log("сменился тип вывода")} />
+            icon={this.state.icon}
+            onSwitch={this.handleIconSwitch} />
         </div>
-        {this.renderLayout(true)}
+        {this.renderLayout(this.state.icon === VIEW_MODULE)}
       </div>
     );
+  }
+
+  handleIconSwitch = (event) => {
+    event.preventDefault();
+    this.setState({
+      icon: this.state.icon === VIEW_MODULE ? VIEW_LIST : VIEW_MODULE
+    });
   }
 
   renderLayout(cardView) {
