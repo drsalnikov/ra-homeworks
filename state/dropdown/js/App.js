@@ -31,7 +31,7 @@ class App extends React.Component {
     );
   }
 
-  handleChange(option) {
+  handleChange = (option) => {
     this.setState({
       active: option
     });

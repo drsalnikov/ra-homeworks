@@ -11,7 +11,7 @@ class App extends React.Component {
     }
   }
 
-  render() {
+  render = () => {
     return (
       <div>
         <div className="toolbar">
@@ -31,7 +31,7 @@ class App extends React.Component {
     });
   }
 
-  renderLayout(cardView) {
+  renderLayout = (cardView) => {
     if (cardView) {
       return (
         <CardsView
@@ -42,7 +42,7 @@ class App extends React.Component {
     return (<ListView items={this.getShopItems(this.props.products, cardView)} />);
   }
 
-  getShopItems(products, cardView) {
+  getShopItems = (products, cardView) => {
     return products.map(product => {
       let cardProps = {
         title: product.name,
@@ -58,4 +58,5 @@ class App extends React.Component {
       return (<ShopItem {...cardProps}/>)
     });
   }
+
 }

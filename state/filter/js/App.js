@@ -22,8 +22,7 @@ class App extends React.Component {
   }
 
   handleSetFilter = (filter) => {
-    let projects = this.props.projects;
-
+    const projects = this.props.projects;
     this.setState({
       selectedFilter: filter,
       projectsFiltered: projects.filter(project => filter === 'All' || project.category === filter )
