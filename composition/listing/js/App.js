@@ -2,6 +2,12 @@
 
 const App = ({items}) => (
   <main>
+    <Listing items={items} />
+  </main>
+);
+
+const Listing = ({items}) => (
+  <ul>
     {items.map(item => {
       switch(item.type) {
         case 'unisex':
@@ -12,5 +18,5 @@ const App = ({items}) => (
           return <Item color="orange" item={item} />;
       }
     })}
-  </main>
+  </ul>
 );
